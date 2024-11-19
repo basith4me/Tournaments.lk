@@ -1,9 +1,9 @@
-import "./App.css";
+import Routes from "./routes";
 
 function App() {
   return (
     <>
-      <p className="text-xl font-extrabold">test tailwind</p>
+      <Routes />
     </>
   );
 }
