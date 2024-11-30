@@ -9,7 +9,7 @@ const Hero = () => {
       <h1 className="text-[20px]">
         Track the tournaments that near You with TournamentsLK
       </h1>
-      <img src="" alt="images" />
+      {/* <img src="" alt="images" /> */}
       <div className="flex space-x-3 text-xl font-bold">
         <p>20+ Sports |</p>
         <p>100+ Tournaments |</p>
