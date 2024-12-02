@@ -6,19 +6,21 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import HomePage from "./pages/teams/HomePage";
-import Tournaments from "./pages/teams/Tournaments"
-import SingleTournament from "./pages/teams/SingleTournament"
+import Tournaments from "./pages/teams/Tournaments";
+import SingleTournament from "./pages/teams/SingleTournament";
+import SignIn from "./pages/organizations/SignIn";
 const Routes = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
         <Route path="/" element={<HomePage />} />
-        <Route path="/tournaments" element={<Tournaments />} />
+        <Route path="/alltournaments" element={<Tournaments />} />
         <Route path="/details" element={<SingleTournament />} />
+        <Route path="signin" element={<SignIn />} />
       </Route>
     )
   );
-  return <RouterProvider router={router} />;    
+  return <RouterProvider router={router} />;
 };
 
 export default Routes;

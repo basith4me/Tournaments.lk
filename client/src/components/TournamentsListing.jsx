@@ -1,12 +1,13 @@
 import React from "react";
 import TournamentCard from "./TournamentCard";
+import { Link } from "react-router-dom";
 
-const TournamentsListing = () => {
+const TournamentsListing = ({ ishome = true }) => {
   return (
     <section className="bg-blue-50 px-4 py-10">
       <div className="container-xl lg:container m-auto">
         <h2 className="text-3xl font-bold text-green-600 mb-6 text-center">
-          {/* {ishome ? "Recent Jobs" : "Browse Jobs"} */} Upcomming Tournaments
+          {ishome ? "Upcomming Tournaments" : "All Tournaments"}
         </h2>
 
         {/* {loading ? (
@@ -22,11 +23,17 @@ const TournamentsListing = () => {
         </div>
         {/* )} */}
       </div>
-      <div className="flex justify-center items-center pt-10">
-        <button className="bg-black text-white py-3 font-bold text-xl rounded-lg hover:shadow-2xl px-10">
-          View all Tournaments
-        </button>
-      </div>
+      {ishome ? (
+        <div className="flex justify-center items-center pt-10">
+          <Link to={"/alltournaments"}>
+            <button className="bg-black text-white py-3 font-bold text-xl rounded-lg hover:shadow-2xl px-10">
+              View all Tournaments
+            </button>
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
     </section>
   );
 };

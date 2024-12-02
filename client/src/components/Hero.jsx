@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -15,9 +16,11 @@ const Hero = () => {
         <p>100+ Tournaments |</p>
         <p>1000+ Users</p>
       </div>
-      <button className="uppercase bg-green-600 p-3 font-bold rounded-md text-gray-100 hover:bg-green-700 duration-300">
+      <Link to={"/signin"}>
+      <p className="uppercase bg-green-600 p-3 font-bold rounded-md text-gray-100 hover:bg-green-700 duration-300">
         Post Your Tournament || it's free!
-      </button>
+      </p>
+      </Link>
     </div>
   );
 };
