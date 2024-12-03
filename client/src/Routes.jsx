@@ -8,7 +8,8 @@ import {
 import HomePage from "./pages/teams/HomePage";
 import Tournaments from "./pages/teams/Tournaments";
 import SingleTournament from "./pages/teams/SingleTournament";
-import SignIn from "./pages/organizations/SignIn";
+import AuthPage from "./pages/organizations/AuthPage";
+
 const Routes = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -16,7 +17,7 @@ const Routes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/alltournaments" element={<Tournaments />} />
         <Route path="/details" element={<SingleTournament />} />
-        <Route path="signin" element={<SignIn />} />
+        <Route path="signin" element={<AuthPage />} />
       </Route>
     )
   );
