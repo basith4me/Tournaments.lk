@@ -1,6 +1,7 @@
 import React from "react";
 import TournamentCard from "./TournamentCard";
 import { Link } from "react-router-dom";
+import { matches } from "../pages/teams/data.js";
 
 const TournamentsListing = ({ ishome = true }) => {
   return (
@@ -10,18 +11,12 @@ const TournamentsListing = ({ ishome = true }) => {
           {ishome ? "Upcomming Tournaments" : "All Tournaments"}
         </h2>
 
-        {/* {loading ? (
-          <Spinner loading={loading} />
-        ) : ( */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* {jobs.map((job) => ( */}
-          <TournamentCard />
-          <TournamentCard />
-          <TournamentCard />
-
-          {/* ))} */}
+          {matches.slice(0, ishome ? 3 : matches.length)
+          .map((tournament) => (
+            <TournamentCard key={tournament.id} tournament={tournament} />
+          ))}
         </div>
-        {/* )} */}
       </div>
       {ishome ? (
         <div className="flex justify-center items-center pt-10">
