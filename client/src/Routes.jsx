@@ -10,6 +10,7 @@ import Tournaments from "./pages/teams/Tournaments";
 import SingleTournament from "./pages/teams/SingleTournament";
 import AuthPage from "./pages/organizations/AuthPage";
 import PostTournaments from "./pages/organizations/PostTournaments";
+import MyTournaments from "./pages/organizations/MyTournaments";
 import AboutUs from "./components/AboutUs";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -30,6 +31,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <PostTournaments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-tournaments"
+          element={
+            <ProtectedRoute>
+              <MyTournaments />
             </ProtectedRoute>
           }
         />
