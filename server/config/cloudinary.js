@@ -2,6 +2,20 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
+// Validate Cloudinary configuration
+if (
+  !process.env.CLOUDINARY_CLOUD_NAME ||
+  !process.env.CLOUDINARY_API_KEY ||
+  !process.env.CLOUDINARY_API_SECRET
+) {
+  console.error("❌ ERROR: Cloudinary credentials are not configured!");
+  console.error("Please set the following in your .env file:");
+  console.error("  - CLOUDINARY_CLOUD_NAME");
+  console.error("  - CLOUDINARY_API_KEY");
+  console.error("  - CLOUDINARY_API_SECRET");
+  console.error("\nSign up for free at: https://cloudinary.com/users/register_free");
+}
+
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
