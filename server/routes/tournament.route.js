@@ -6,9 +6,11 @@ const { upload } = require("../config/cloudinary");
 
 // Public routes
 router.get("/", tournamentController.getAllTournaments);
-router.get("/:id", tournamentController.getTournamentById);
 
 // Protected routes (require authentication)
+// IMPORTANT: Specific routes must come before parameterized routes
+router.get("/user/my-tournaments", protect, tournamentController.getMyTournaments);
+
 router.post(
   "/",
   protect,
@@ -16,7 +18,8 @@ router.post(
   tournamentController.postTournament
 );
 
-router.get("/user/my-tournaments", protect, tournamentController.getMyTournaments);
+// This must come after /user/my-tournaments to avoid matching "user" as an ID
+router.get("/:id", tournamentController.getTournamentById);
 
 router.put(
   "/:id",
