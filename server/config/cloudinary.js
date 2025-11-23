@@ -23,6 +23,24 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Test Cloudinary connection
+console.log("\n☁️  Testing Cloudinary Connection...");
+console.log("Cloud Name:", process.env.CLOUDINARY_CLOUD_NAME);
+
+cloudinary.api.ping((error, result) => {
+  if (error) {
+    console.error("❌ Cloudinary connection FAILED:");
+    console.error("Error:", error.message);
+    console.error("\n⚠️  Please verify your Cloudinary credentials:");
+    console.error("1. Go to: https://cloudinary.com/console");
+    console.error("2. Check if Cloud Name is correct (case-sensitive!)");
+    console.error("3. Verify API Key and API Secret");
+    console.error("4. Your Cloud Name:", process.env.CLOUDINARY_CLOUD_NAME);
+  } else {
+    console.log("✅ Cloudinary connected successfully!");
+  }
+});
+
 // Configure Cloudinary storage for multer
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
