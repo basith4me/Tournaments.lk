@@ -4,6 +4,21 @@ const { cloudinary } = require("../config/cloudinary");
 // Create a new tournament
 exports.postTournament = async (req, res) => {
   try {
+    // Debug logging
+    console.log("\n📝 Creating Tournament - Debug Info:");
+    console.log("req.user:", req.user);
+    console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
+
+    // Check if user is authenticated
+    if (!req.user || !req.user._id) {
+      console.error("❌ Authentication Error: req.user is undefined");
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required. User not found in request.",
+      });
+    }
+
     const {
       name,
       sport,
@@ -16,8 +31,18 @@ exports.postTournament = async (req, res) => {
       contact,
     } = req.body;
 
+    // Validate required fields
+    if (!name || !sport || !startDate || !tournamentType || !location || !district || !contact) {
+      console.error("❌ Validation Error: Missing required fields");
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all required fields",
+      });
+    }
+
     // Get banner URL from uploaded file (if using multer-cloudinary)
     const banner = req.file ? req.file.path : null;
+    console.log("Banner URL:", banner);
 
     const tournament = new Tournament({
       name,
@@ -34,6 +59,7 @@ exports.postTournament = async (req, res) => {
     });
 
     await tournament.save();
+    console.log("✅ Tournament created successfully:", tournament._id);
 
     res.status(201).json({
       success: true,
@@ -41,7 +67,11 @@ exports.postTournament = async (req, res) => {
       data: tournament,
     });
   } catch (error) {
-    console.error("Error creating tournament:", error);
+    console.error("❌ Error creating tournament:");
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+
     res.status(500).json({
       success: false,
       message: error.message || "Internal server error",
