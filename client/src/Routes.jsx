@@ -12,6 +12,7 @@ import AuthPage from "./pages/organizations/AuthPage";
 import PostTournaments from "./pages/organizations/PostTournaments";
 import MyTournaments from "./pages/organizations/MyTournaments";
 import AboutUs from "./components/AboutUs";
+import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => {
@@ -42,6 +43,9 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* 404 - Must be last */}
+        <Route path="*" element={<NotFound />} />
       </Route>
     )
   );
