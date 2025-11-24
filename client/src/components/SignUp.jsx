@@ -59,8 +59,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="p-10 bg-gradient-to-r from-[#e7f7b0] to-[#b8e3c5] rounded-lg shadow-lg text-center">
-      <h1 className="text-2xl font-bold text-gray-800 mb-8">
+    <div className="p-10 bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl shadow-xl text-center">
+      <h1 className="text-3xl font-heading font-bold text-secondary-800 mb-8">
         Register in TournamentsLK
       </h1>
 
@@ -72,7 +72,7 @@ const SignUp = () => {
           name="name"
           type="text"
           placeholder="Sport club name"
-          className="p-2 border-2 border-green-600 rounded-md"
+          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           disabled={loading}
         />
         <input
@@ -84,7 +84,7 @@ const SignUp = () => {
           name="phoneNo"
           type="text"
           placeholder="Phone Number (07XXXXXXXX)"
-          className="p-2 border-2 border-green-600 rounded-md"
+          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           disabled={loading}
         />
         <input
@@ -94,7 +94,7 @@ const SignUp = () => {
           name="email"
           type="email"
           placeholder="Email"
-          className="p-2 border-2 border-green-600 rounded-md"
+          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           disabled={loading}
         />
         <input
@@ -104,7 +104,7 @@ const SignUp = () => {
           name="address"
           type="text"
           placeholder="Address"
-          className="p-2 border-2 border-green-600 rounded-md"
+          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           disabled={loading}
         />
         <input
@@ -115,7 +115,7 @@ const SignUp = () => {
           type="password"
           placeholder="Set a Password (min 6 characters)"
           minLength={6}
-          className="p-2 border-2 border-green-600 rounded-md"
+          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           disabled={loading}
         />
         <input
@@ -125,17 +125,17 @@ const SignUp = () => {
           name="confirmPassword"
           type="password"
           placeholder="Confirm Password"
-          className="p-2 border-2 border-green-600 rounded-md"
+          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           disabled={loading}
         />
 
-        <p className="text-blue-600 mt-0 text-sm">
+        <p className="text-accent-600 mt-0 text-sm font-medium">
           Remember password for signin
         </p>
         <button
           type="submit"
           disabled={loading}
-          className="border bg-green-600 rounded-md p-2 font-bold text-white hover:bg-green-700 duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="bg-primary-600 rounded-lg p-3 font-semibold text-white hover:bg-primary-700 transition-all duration-200 hover:shadow-lg disabled:bg-secondary-400 disabled:cursor-not-allowed disabled:hover:shadow-none"
         >
           {loading ? "Registering..." : "Register"}
         </button>
