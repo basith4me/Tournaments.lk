@@ -14,6 +14,12 @@ import MyTournaments from "./pages/organizations/MyTournaments";
 import AboutUs from "./components/AboutUs";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./components/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import OrganizersListPage from "./pages/admin/OrganizersListPage";
+import OrganizerDetailsPage from "./pages/admin/OrganizerDetailsPage";
+import TournamentsManagementPage from "./pages/admin/TournamentsManagementPage";
 
 const AppRoutes = () => {
   const router = createBrowserRouter(
@@ -43,6 +49,15 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="organizers" element={<OrganizersListPage />} />
+          <Route path="organizers/:id" element={<OrganizerDetailsPage />} />
+          <Route path="tournaments" element={<TournamentsManagementPage />} />
+        </Route>
 
         {/* 404 - Must be last */}
         <Route path="*" element={<NotFound />} />

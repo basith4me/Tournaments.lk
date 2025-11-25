@@ -5,6 +5,7 @@ require("dotenv").config(); // Add this
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.routes.js");
 const tournamentRoute = require("./routes/tournament.route.js");
+const adminRoute = require("./routes/admin.route.js");
 
 const app = express();
 
@@ -20,6 +21,7 @@ connectDB();
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/tournaments", tournamentRoute);
+app.use("/api/admin", adminRoute);
 
 // Health check route
 app.get("/", (req, res) => {
