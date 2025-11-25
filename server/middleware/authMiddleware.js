@@ -50,4 +50,18 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+// Admin middleware - must be used after protect middleware
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    console.log("✅ Admin access granted:", req.user._id);
+    next();
+  } else {
+    console.error("❌ Admin access denied - user is not an admin");
+    return res.status(403).json({
+      success: false,
+      message: "Access denied. Admin privileges required.",
+    });
+  }
+};
+
+module.exports = { protect, admin };
