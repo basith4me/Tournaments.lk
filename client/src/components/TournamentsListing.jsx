@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import TournamentCard from "./TournamentCard";
 import { Link } from "react-router-dom";
 import api from "../services/api";
@@ -9,34 +9,38 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Memoize filter values to prevent unnecessary re-renders
+  const sport = useMemo(() => filters.sport || "", [filters.sport]);
+  const district = useMemo(() => filters.district || "", [filters.district]);
+
   useEffect(() => {
-    fetchTournaments();
-  }, [filters]);
+    const fetchTournaments = async () => {
+      try {
+        setLoading(true);
 
-  const fetchTournaments = async () => {
-    try {
-      setLoading(true);
+        // Build query string from filters
+        const params = new URLSearchParams();
+        if (sport) params.append("sport", sport);
+        if (district) params.append("district", district);
 
-      // Build query string from filters
-      const params = new URLSearchParams();
-      if (filters.sport) params.append("sport", filters.sport);
-      if (filters.district) params.append("district", filters.district);
+        const queryString = params.toString();
+        const url = `/tournaments${queryString ? `?${queryString}` : ""}`;
 
-      const queryString = params.toString();
-      const url = `/tournaments${queryString ? `?${queryString}` : ""}`;
+        const response = await api.get(url);
 
-      const response = await api.get(url);
-
-      if (response.data.success) {
-        setTournaments(response.data.data);
+        if (response.data.success) {
+          setTournaments(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching tournaments:", error);
+        toast.error("Failed to load tournaments");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching tournaments:", error);
-      toast.error("Failed to load tournaments");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchTournaments();
+  }, [sport, district]); // Use individual filter values instead of the object
 
   if (loading) {
     return (
