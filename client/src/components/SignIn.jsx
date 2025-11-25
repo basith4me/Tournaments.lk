@@ -36,14 +36,14 @@ const SignIn = () => {
   };
 
   return (
-    <div className="w-full md:w-1/3">
+    <div className="w-full md:w-1/3 animate-fade-in">
       {isLoggedIn ? (
-        <div className="p-16 bg-gradient-to-r from-[#e7f7b0] to-[#b8e3c5] rounded-lg shadow-lg text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-8">
+        <div className="p-12 bg-gradient-to-r from-primary-50 to-primary-100 rounded-xl shadow-xl text-center">
+          <h1 className="text-3xl font-heading font-bold text-secondary-800 mb-8">
             Sign-in to Post Tournament
           </h1>
 
-          <form onSubmit={handleSubmit} className="flex flex-col mt-2 space-y-4">
+          <form onSubmit={handleSubmit} className="flex flex-col mt-2 space-y-5">
             <input
               required
               name="email"
@@ -51,7 +51,7 @@ const SignIn = () => {
               onChange={handleChange}
               type="email"
               placeholder="Email"
-              className="p-2 border-2 border-green-600 rounded-md"
+              className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               disabled={loading}
             />
             <input
@@ -61,18 +61,18 @@ const SignIn = () => {
               onChange={handleChange}
               type="password"
               placeholder="Password"
-              className="p-2 border-2 border-green-600 rounded-md"
+              className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               disabled={loading}
             />
             <button
               type="submit"
               disabled={loading}
-              className="border bg-green-600 rounded-md p-2 font-bold text-white hover:bg-green-700 duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="bg-primary-600 rounded-lg p-3 font-semibold text-white hover:bg-primary-700 transition-all duration-200 hover:shadow-lg disabled:bg-secondary-400 disabled:cursor-not-allowed disabled:hover:shadow-none"
             >
               {loading ? "Logging in..." : "Login"}
             </button>
             <p
-              className="text-blue-600 cursor-pointer hover:underline"
+              className="text-accent-600 cursor-pointer hover:underline font-medium"
               onClick={() => setIsLoggedIn(false)}
             >
               Don't have account? Register here

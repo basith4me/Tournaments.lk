@@ -3,6 +3,7 @@ import logo from "../assets/logo3.png";
 import { GiPadlockOpen } from "react-icons/gi";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
+import { FaTrophy } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
@@ -19,76 +20,175 @@ const NavBar = () => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-between p-5">
-      <div>
-        <img src={logo} alt="logo" width={500} />
-      </div>
-      <div className="md:hidden">
-        {isMenuOpen ? (
-          <HiX
-            className="text-red-600 text-3xl cursor-pointer"
-            onClick={() => setIsMenuOpen(false)}
-          />
-        ) : (
-          <HiMenu
-            className="text-green-600 text-3xl cursor-pointer"
-            onClick={() => setIsMenuOpen(true)}
-          />
-        )}
-      </div>
-
-      <div
-        className={`${
-          isMenuOpen ? "flex" : "hidden"
-        } absolute top-10 right-5 bg-gray-200 shadow-md p-1 rounded-lg flex-col space-y-4 items-center md:static md:flex md:flex-row md:space-y-0 md:space-x-6 md:bg-transparent md:shadow-none`}
-      >
-        <Link to={"/"} className="text-2xl underline cursor-pointer">
-          Home
-        </Link>
-        <Link
-          to={"/alltournaments"}
-          className="text-2xl underline cursor-pointer"
-        >
-          Tournaments
-        </Link>
-        <Link to={"/aboutus"} className="text-2xl underline cursor-pointer">
-          About us
-        </Link>
-
-        {isAuthenticated ? (
-          <>
-            <div className="flex items-center space-x-2">
-              <span className="text-green-700 font-semibold">
-                Hello, {user?.name}
-              </span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex space-x-2 cursor-pointer items-center text-red-600 hover:text-red-700"
-            >
-              <FiLogOut className="text-[1.3rem]" />
-              <span className="font-bold uppercase text-[1.3rem]">Logout</span>
-            </button>
-          </>
-        ) : (
-          <Link to={"/signin"}>
-            <div className="flex space-x-2 cursor-pointer items-center">
-              <GiPadlockOpen className="font-bold uppercase text-[1.3rem] text-green-700" />
-              <p className="font-bold uppercase text-[1.3rem] text-green-700">
-                Login
-              </p>
-            </div>
+    <nav className="bg-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo */}
+          <Link to="/" className="flex-shrink-0">
+            <img
+              src={logo}
+              alt="Tournaments.lk Logo"
+              className="h-10 md:h-12 w-auto max-w-[200px] md:max-w-[300px]"
+            />
           </Link>
-        )}
 
-        <Link
-          to={"/post-tournaments"}
-          className="bg-green-600 p-3 uppercase rounded-full text-gray-100 font-bold hover:bg-green-700 duration-300"
-        >
-          Post Tournaments
-        </Link>
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            {isMenuOpen ? (
+              <HiX
+                className="text-error text-3xl cursor-pointer transition-transform hover:scale-110"
+                onClick={() => setIsMenuOpen(false)}
+              />
+            ) : (
+              <HiMenu
+                className="text-primary-600 text-3xl cursor-pointer transition-transform hover:scale-110"
+                onClick={() => setIsMenuOpen(true)}
+              />
+            )}
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex md:items-center md:space-x-6">
+            <Link
+              to="/"
+              className="text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+            >
+              Home
+            </Link>
+            <Link
+              to="/alltournaments"
+              className="text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+            >
+              Tournaments
+            </Link>
+            <Link
+              to="/aboutus"
+              className="text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+            >
+              About Us
+            </Link>
+
+            {isAuthenticated && (
+              <Link
+                to="/my-tournaments"
+                className="text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium flex items-center gap-1"
+              >
+                <FaTrophy className="text-sm" />
+                My Tournaments
+              </Link>
+            )}
+
+            {isAuthenticated ? (
+              <>
+                <span className="text-primary-700 font-semibold">
+                  Hello, {user?.name}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-error hover:text-red-700 transition-colors duration-200 font-medium"
+                >
+                  <FiLogOut />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/signin"
+                className="flex items-center gap-2 text-primary-700 hover:text-primary-800 transition-colors duration-200 font-medium"
+              >
+                <GiPadlockOpen />
+                Login
+              </Link>
+            )}
+
+            {isAuthenticated && (
+              <Link
+                to="/post-tournaments"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
+              >
+                Post Tournament
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 space-y-3 animate-slide-down">
+            <Link
+              to="/"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium py-2"
+            >
+              Home
+            </Link>
+            <Link
+              to="/alltournaments"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium py-2"
+            >
+              Tournaments
+            </Link>
+            <Link
+              to="/aboutus"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium py-2"
+            >
+              About Us
+            </Link>
+
+            {isAuthenticated && (
+              <Link
+                to="/my-tournaments"
+                onClick={() => setIsMenuOpen(false)}
+                className="block text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium py-2 flex items-center gap-2"
+              >
+                <FaTrophy className="text-sm" />
+                My Tournaments
+              </Link>
+            )}
+
+            {isAuthenticated ? (
+              <>
+                <div className="py-2 border-t border-secondary-200">
+                  <span className="text-primary-700 font-semibold">
+                    Hello, {user?.name}
+                  </span>
+                </div>
+                <Link
+                  to="/post-tournaments"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center"
+                >
+                  Post Tournament
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 text-error hover:text-red-700 transition-colors duration-200 font-medium py-2"
+                >
+                  <FiLogOut />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/signin"
+                onClick={() => setIsMenuOpen(false)}
+                className="block bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <GiPadlockOpen />
+                  Login
+                </div>
+              </Link>
+            )}
+          </div>
+        )}
       </div>
-    </div>
+    </nav>
   );
 };
 

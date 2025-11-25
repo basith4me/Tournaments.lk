@@ -95,9 +95,9 @@ const PostTournaments = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-secondary-100 p-6">
+      <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-2xl animate-fade-in">
+        <h2 className="text-3xl font-heading font-bold text-secondary-800 text-center mb-8">
           Create a Tournament
         </h2>
 
@@ -105,8 +105,8 @@ const PostTournaments = () => {
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Tournament Name */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Tournament Name <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Tournament Name <span className="text-error">*</span>
             </label>
             <input
               required
@@ -115,21 +115,21 @@ const PostTournaments = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter tournament name"
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             />
           </div>
 
           {/* Select a Sport */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Select a Sport <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Select a Sport <span className="text-error">*</span>
             </label>
             <select
               required
               name="sport"
               value={formData.sport}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             >
               <option value="">Choose a sport</option>
               <option value="cricket">Cricket</option>
@@ -144,8 +144,8 @@ const PostTournaments = () => {
 
           {/* Tournament Date */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Pick Tournament Date <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Pick Tournament Date <span className="text-error">*</span>
             </label>
             <input
               required
@@ -154,21 +154,21 @@ const PostTournaments = () => {
               value={formData.startDate}
               onChange={handleInputChange}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             />
           </div>
 
           {/* Tournament Type */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Tournament Type <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Tournament Type <span className="text-error">*</span>
             </label>
             <select
               required
               name="tournamentType"
               value={formData.tournamentType}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             >
               <option value="">Choose type</option>
               <option value="day">Day</option>
@@ -178,8 +178,8 @@ const PostTournaments = () => {
 
           {/* Location / Town */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Location / Town <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Location / Town <span className="text-error">*</span>
             </label>
             <input
               required
@@ -188,21 +188,21 @@ const PostTournaments = () => {
               value={formData.location}
               onChange={handleInputChange}
               placeholder="Enter location"
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             />
           </div>
 
           {/* District */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              District <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              District <span className="text-error">*</span>
             </label>
             <select
               required
               name="district"
               value={formData.district}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             >
               <option value="">Choose a district</option>
               <option value="Colombo">Colombo</option>
@@ -235,7 +235,7 @@ const PostTournaments = () => {
 
           {/* Rules & Regulations */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
+            <label className="block text-secondary-700 font-medium mb-2">
               Rules & Regulations
             </label>
             <textarea
@@ -244,13 +244,13 @@ const PostTournaments = () => {
               value={formData.rules}
               onChange={handleInputChange}
               placeholder="Enter rules and regulations"
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             ></textarea>
           </div>
 
           {/* Champion's Prize */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
+            <label className="block text-secondary-700 font-medium mb-2">
               Champion's Prize
             </label>
             <input
@@ -259,14 +259,14 @@ const PostTournaments = () => {
               value={formData.prize}
               onChange={handleInputChange}
               placeholder="Enter 1st prize for the tournament"
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             />
           </div>
 
           {/* Contact Number */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Contact Number <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Contact Number <span className="text-error">*</span>
             </label>
             <input
               required
@@ -277,31 +277,31 @@ const PostTournaments = () => {
               placeholder="Enter contact number"
               pattern="[0-9]{10}"
               title="Please enter a valid 10-digit phone number"
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             />
           </div>
 
           {/* Tournament Banner (Image Upload) */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Tournament Banner <span className="text-red-500">*</span>
+            <label className="block text-secondary-700 font-medium mb-2">
+              Tournament Banner <span className="text-error">*</span>
             </label>
             <input
               required
               type="file"
               accept="image/*"
               onChange={handleBannerUpload}
-              className="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-green-300"
+              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
             />
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-secondary-500 mt-2">
               Max size: 5MB. Supported formats: JPEG, PNG, GIF, WEBP
             </p>
             {bannerPreview && (
-              <div className="mt-2">
+              <div className="mt-3">
                 <img
                   src={bannerPreview}
                   alt="Preview"
-                  className="w-full h-32 object-cover rounded-md border border-gray-300"
+                  className="w-full h-40 object-cover rounded-lg border-2 border-secondary-300 shadow-md"
                 />
               </div>
             )}
@@ -311,7 +311,7 @@ const PostTournaments = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 text-white p-3 rounded font-semibold hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-primary-600 text-white p-3 rounded-lg font-semibold hover:bg-primary-700 transition-all duration-200 hover:shadow-lg disabled:bg-secondary-400 disabled:cursor-not-allowed disabled:hover:shadow-none mt-6"
           >
             {loading ? "Creating Tournament..." : "Submit Tournament"}
           </button>

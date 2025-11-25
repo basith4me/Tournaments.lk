@@ -7,6 +7,7 @@ import { FiPhoneCall } from "react-icons/fi";
 import { LuMapPin } from "react-icons/lu";
 import { toast } from "react-toastify";
 import api from "../../services/api";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const SingleTournament = () => {
   const { id } = useParams();
@@ -44,97 +45,97 @@ const SingleTournament = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-green-100">
-        <div className="text-xl text-gray-600">Loading tournament details...</div>
+      <div className="min-h-screen flex items-center justify-center bg-secondary-100">
+        <LoadingSpinner text="Loading tournament details..." />
       </div>
     );
   }
 
   if (!tournament) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-green-100">
-        <div className="text-xl text-gray-600">Tournament not found</div>
+      <div className="min-h-screen flex items-center justify-center bg-secondary-100">
+        <div className="text-xl text-secondary-600">Tournament not found</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-100 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6">
+    <div className="min-h-screen flex items-center justify-center bg-secondary-100 p-4 animate-fade-in">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl p-8 animate-slide-up">
         {/* Tournament Poster */}
-        <div className="justify-center items-center flex w-full">
+        <div className="justify-center items-center flex w-full mb-6">
           <img
             src={tournament.banner || "/placeholder-tournament.jpg"}
             alt={tournament.name}
-            className="w-full max-w-md rounded-md"
+            className="w-full max-w-md rounded-lg shadow-lg"
           />
         </div>
 
         {/* Tournament Type */}
-        <div className="flex justify-between mt-4 flex-wrap gap-2">
+        <div className="flex justify-between mt-6 flex-wrap gap-3">
           {tournament.prize && (
-            <div className="flex items-center space-x-2 text-yellow-600 text-xl font-semibold">
+            <div className="flex items-center space-x-2 text-warning text-xl font-semibold">
               <GoTrophy className="text-2xl" />
               <p>{tournament.prize}</p>
             </div>
           )}
-          <div className="flex items-center justify-end text-green-700 text-lg font-semibold">
+          <div className="flex items-center justify-end text-primary-700 text-lg font-semibold">
             <GiCricketBat className="text-2xl mr-2" />
             <p className="capitalize">{tournament.sport}</p>
           </div>
         </div>
 
         {/* Tournament Info */}
-        <h1 className="mt-3 text-2xl font-bold text-gray-800 text-center">
+        <h1 className="mt-4 text-3xl md:text-4xl font-heading font-bold text-secondary-800 text-center">
           {tournament.name}
         </h1>
 
-        <div className="mt-4 space-y-3 text-gray-700">
-          <div className="flex items-center space-x-2">
-            <BiCalendar className="text-xl text-green-600" />
+        <div className="mt-6 space-y-4 text-secondary-700">
+          <div className="flex items-center space-x-3">
+            <BiCalendar className="text-2xl text-primary-600" />
             <p className="text-lg">
               {formatDate(tournament.startDate)} |{" "}
               <span className="capitalize">{tournament.tournamentType}</span> Tournament
             </p>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <LuMapPin className="text-xl text-red-600" />
+          <div className="flex items-center space-x-3">
+            <LuMapPin className="text-2xl text-error" />
             <p className="text-lg">
               {tournament.location}, {tournament.district}
             </p>
           </div>
 
           {tournament.rules && (
-            <div className="text-left">
-              <p className="font-bold text-lg mb-2">Rules and Regulations</p>
-              <p className="text-gray-600 whitespace-pre-wrap">{tournament.rules}</p>
+            <div className="text-left mt-6">
+              <p className="font-heading font-bold text-xl mb-3 text-secondary-800">Rules and Regulations</p>
+              <p className="text-secondary-600 whitespace-pre-wrap bg-secondary-50 p-4 rounded-lg">{tournament.rules}</p>
             </div>
           )}
 
           {tournament.creator && (
-            <div className="bg-gray-50 p-3 rounded-md">
-              <p className="font-bold text-sm text-gray-600 mb-1">Organized By</p>
-              <p className="text-gray-800">{tournament.creator.name}</p>
+            <div className="bg-primary-50 p-4 rounded-lg border border-primary-200 mt-6">
+              <p className="font-semibold text-sm text-secondary-600 mb-2">Organized By</p>
+              <p className="text-secondary-800 font-medium">{tournament.creator.name}</p>
               {tournament.creator.email && (
-                <p className="text-sm text-gray-600">{tournament.creator.email}</p>
+                <p className="text-sm text-secondary-600 mt-1">{tournament.creator.email}</p>
               )}
             </div>
           )}
         </div>
 
         {/* Divider */}
-        <div className="my-4 border-t border-gray-300"></div>
+        <hr className="my-6 border-t border-secondary-300" />
 
         {/* Contact */}
-        <div className="flex flex-col items-center space-y-3">
-          <div className="flex items-center space-x-2 text-blue-600 text-lg font-medium">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex items-center space-x-2 text-accent-600 text-lg font-medium">
             <FiPhoneCall className="text-xl" />
             <p>{tournament.contact}</p>
           </div>
           <button
             onClick={() => navigate("/alltournaments")}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+            className="bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 transition-all duration-200 hover:shadow-lg font-semibold"
           >
             Back to Tournaments
           </button>

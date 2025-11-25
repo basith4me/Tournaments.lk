@@ -3,6 +3,7 @@ import TournamentCard from "./TournamentCard";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import { toast } from "react-toastify";
+import LoadingSpinner from "./LoadingSpinner";
 
 const TournamentsListing = ({ ishome = true, filters = {} }) => {
   const [tournaments, setTournaments] = useState([]);
@@ -39,9 +40,9 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
 
   if (loading) {
     return (
-      <section className="bg-blue-50 px-4 py-10">
+      <section className="bg-secondary-50 px-4 py-10">
         <div className="container-xl lg:container m-auto text-center">
-          <p className="text-xl text-gray-600">Loading tournaments...</p>
+          <LoadingSpinner text="Loading tournaments..." />
         </div>
       </section>
     );
@@ -50,17 +51,17 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
   const displayTournaments = ishome ? tournaments.slice(0, 3) : tournaments;
 
   return (
-    <section className="bg-blue-50 px-4 py-10">
+    <section className="bg-secondary-50 px-4 py-10 animate-fade-in">
       <div className="container-xl lg:container m-auto">
-        <h2 className="text-3xl font-bold text-green-600 mb-6 text-center">
+        <h2 className="text-3xl md:text-4xl font-heading font-bold text-primary-600 mb-8 text-center">
           {ishome ? "Upcoming Tournaments" : "All Tournaments"}
         </h2>
 
         {displayTournaments.length === 0 ? (
           <div className="text-center py-10">
-            <p className="text-xl text-gray-600">No tournaments found</p>
+            <p className="text-xl text-secondary-600">No tournaments found</p>
             {!ishome && (
-              <p className="text-gray-500 mt-2">Try adjusting your filters</p>
+              <p className="text-secondary-500 mt-2">Try adjusting your filters</p>
             )}
           </div>
         ) : (
@@ -74,7 +75,7 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
       {ishome ? (
         <div className="flex justify-center items-center pt-10">
           <Link to={"/alltournaments"}>
-            <button className="bg-black text-white py-3 font-bold text-xl rounded-lg hover:shadow-2xl px-10">
+            <button className="bg-secondary-800 text-white py-3 font-semibold text-xl rounded-lg hover:bg-secondary-900 hover:shadow-xl px-10 transition-all duration-200">
               View all Tournaments
             </button>
           </Link>
