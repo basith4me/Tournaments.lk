@@ -5,7 +5,7 @@ import Hero from "../../components/Hero";
 import TournamentsListing from "../../components/TournamentsListing";
 import FeedBack from "../../components/FeedBack";
 import Footer from "../../components/Footer";
-import ContactUs from "../../components/ContactUs";
+// import ContactUs from "../../components/ContactUs";
 
 const HomePage = () => {
   return (
@@ -16,7 +16,7 @@ const HomePage = () => {
         <TournamentsListing />
         <FeedBack />
         <Footer />
-        <ContactUs />
+        {/* <ContactUs /> */}
       </div>
     </>
   );
