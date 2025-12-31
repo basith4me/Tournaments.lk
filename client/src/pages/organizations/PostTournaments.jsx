@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
+import {districts, sports} from "../teams/data.js";
 
 const PostTournaments = () => {
   const navigate = useNavigate();
@@ -31,9 +32,17 @@ const PostTournaments = () => {
       }
 
       // Validate file type
-      const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+      const validTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
       if (!validTypes.includes(file.type)) {
-        toast.error("Please upload a valid image file (JPEG, PNG, GIF, or WEBP)");
+        toast.error(
+          "Please upload a valid image file (JPEG, PNG, GIF, or WEBP)"
+        );
         return;
       }
 
@@ -87,7 +96,8 @@ const PostTournaments = () => {
     } catch (error) {
       console.error("Error creating tournament:", error);
       const errorMessage =
-        error.response?.data?.message || "Failed to create tournament. Please try again.";
+        error.response?.data?.message ||
+        "Failed to create tournament. Please try again.";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -115,7 +125,7 @@ const PostTournaments = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter tournament name"
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             />
           </div>
 
@@ -129,16 +139,14 @@ const PostTournaments = () => {
               name="sport"
               value={formData.sport}
               onChange={handleInputChange}
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             >
-              <option value="">Choose a sport</option>
-              <option value="cricket">Cricket</option>
-              <option value="football">Football</option>
-              <option value="basketball">Basketball</option>
-              <option value="volleyball">Volleyball</option>
-              <option value="tennis">Tennis</option>
-              <option value="badminton">Badminton</option>
-              <option value="other">Other</option>
+              <option value="">Choose the sport</option>
+              {sports.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -154,7 +162,7 @@ const PostTournaments = () => {
               value={formData.startDate}
               onChange={handleInputChange}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             />
           </div>
 
@@ -168,7 +176,7 @@ const PostTournaments = () => {
               name="tournamentType"
               value={formData.tournamentType}
               onChange={handleInputChange}
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             >
               <option value="">Choose type</option>
               <option value="day">Day</option>
@@ -188,7 +196,7 @@ const PostTournaments = () => {
               value={formData.location}
               onChange={handleInputChange}
               placeholder="Enter location"
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             />
           </div>
 
@@ -202,34 +210,14 @@ const PostTournaments = () => {
               name="district"
               value={formData.district}
               onChange={handleInputChange}
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             >
               <option value="">Choose a district</option>
-              <option value="Colombo">Colombo</option>
-              <option value="Gampaha">Gampaha</option>
-              <option value="Kalutara">Kalutara</option>
-              <option value="Kandy">Kandy</option>
-              <option value="Matale">Matale</option>
-              <option value="Nuwara Eliya">Nuwara Eliya</option>
-              <option value="Galle">Galle</option>
-              <option value="Matara">Matara</option>
-              <option value="Hambantota">Hambantota</option>
-              <option value="Jaffna">Jaffna</option>
-              <option value="Kilinochchi">Kilinochchi</option>
-              <option value="Mannar">Mannar</option>
-              <option value="Vavuniya">Vavuniya</option>
-              <option value="Mullaitivu">Mullaitivu</option>
-              <option value="Batticaloa">Batticaloa</option>
-              <option value="Ampara">Ampara</option>
-              <option value="Trincomalee">Trincomalee</option>
-              <option value="Kurunegala">Kurunegala</option>
-              <option value="Puttalam">Puttalam</option>
-              <option value="Anuradhapura">Anuradhapura</option>
-              <option value="Polonnaruwa">Polonnaruwa</option>
-              <option value="Badulla">Badulla</option>
-              <option value="Moneragala">Moneragala</option>
-              <option value="Ratnapura">Ratnapura</option>
-              <option value="Kegalle">Kegalle</option>
+              {districts.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -244,7 +232,7 @@ const PostTournaments = () => {
               value={formData.rules}
               onChange={handleInputChange}
               placeholder="Enter rules and regulations"
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             ></textarea>
           </div>
 
@@ -254,12 +242,12 @@ const PostTournaments = () => {
               Champion's Prize
             </label>
             <input
-              type="text"
+              type="number"
               name="prize"
               value={formData.prize}
               onChange={handleInputChange}
               placeholder="Enter 1st prize for the tournament"
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             />
           </div>
 
@@ -277,7 +265,7 @@ const PostTournaments = () => {
               placeholder="Enter contact number"
               pattern="[0-9]{10}"
               title="Please enter a valid 10-digit phone number"
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
             />
           </div>
 
@@ -291,7 +279,7 @@ const PostTournaments = () => {
               type="file"
               accept="image/*"
               onChange={handleBannerUpload}
-              className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
             />
             <p className="text-sm text-secondary-500 mt-2">
               Max size: 5MB. Supported formats: JPEG, PNG, GIF, WEBP
@@ -301,7 +289,7 @@ const PostTournaments = () => {
                 <img
                   src={bannerPreview}
                   alt="Preview"
-                  className="w-full h-40 object-cover rounded-lg border-2 border-secondary-300 shadow-md"
+                  className="w-full h-40 object-cover rounded-lg border-2 border-green-600 shadow-md"
                 />
               </div>
             )}

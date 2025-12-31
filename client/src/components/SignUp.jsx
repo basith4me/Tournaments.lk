@@ -65,69 +65,106 @@ const SignUp = () => {
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col mt-2 space-y-4">
-        <input
-          required
-          onChange={handleChange}
-          value={formData.name}
-          name="name"
-          type="text"
-          placeholder="Sport club name"
-          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          disabled={loading}
-        />
-        <input
-          required
-          onChange={handleChange}
-          value={formData.phoneNo}
-          pattern="^07\d{8}$"
-          title="Phone number must start with 07 and be 10 digits"
-          name="phoneNo"
-          type="text"
-          placeholder="Phone Number (07XXXXXXXX)"
-          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          disabled={loading}
-        />
-        <input
-          required
-          onChange={handleChange}
-          value={formData.email}
-          name="email"
-          type="email"
-          placeholder="Email"
-          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          disabled={loading}
-        />
-        <input
-          required
-          onChange={handleChange}
-          value={formData.address}
-          name="address"
-          type="text"
-          placeholder="Address"
-          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          disabled={loading}
-        />
-        <input
-          required
-          onChange={handleChange}
-          value={formData.setPassword}
-          name="setPassword"
-          type="password"
-          placeholder="Set a Password (min 6 characters)"
-          minLength={6}
-          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          disabled={loading}
-        />
-        <input
-          required
-          onChange={handleChange}
-          value={formData.confirmPassword}
-          name="confirmPassword"
-          type="password"
-          placeholder="Confirm Password"
-          className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          disabled={loading}
-        />
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-secondary-700 mb-2">
+            Sport Club Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            required
+            onChange={handleChange}
+            value={formData.name}
+            name="name"
+            type="text"
+            placeholder="Enter your sport club name"
+            className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-secondary-700 mb-2">
+            Phone Number <span className="text-red-500">*</span>
+          </label>
+          <input
+            required
+            onChange={handleChange}
+            value={formData.phoneNo}
+            pattern="^07\d{8}$"
+            title="Phone number must start with 07 and be 10 digits"
+            name="phoneNo"
+            type="text"
+            placeholder="07XXXXXXXX"
+            className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            disabled={loading}
+          />
+          <p className="text-xs text-secondary-600 mt-1">Format: 07 followed by 8 digits</p>
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-secondary-700 mb-2">
+            Email Address <span className="text-red-500">*</span>
+          </label>
+          <input
+            required
+            onChange={handleChange}
+            value={formData.email}
+            name="email"
+            type="email"
+            placeholder="your@email.com"
+            className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-secondary-700 mb-2">
+            Address <span className="text-red-500">*</span>
+          </label>
+          <input
+            required
+            onChange={handleChange}
+            value={formData.address}
+            name="address"
+            type="text"
+            placeholder="Enter your club address"
+            className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-secondary-700 mb-2">
+            Password <span className="text-red-500">*</span>
+          </label>
+          <input
+            required
+            onChange={handleChange}
+            value={formData.setPassword}
+            name="setPassword"
+            type="password"
+            placeholder="Enter a secure password"
+            minLength={6}
+            className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            disabled={loading}
+          />
+          <p className="text-xs text-secondary-600 mt-1">Minimum 6 characters required</p>
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-secondary-700 mb-2">
+            Confirm Password <span className="text-red-500">*</span>
+          </label>
+          <input
+            required
+            onChange={handleChange}
+            value={formData.confirmPassword}
+            name="confirmPassword"
+            type="password"
+            placeholder="Re-enter your password"
+            className="p-3 border-2 border-primary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            disabled={loading}
+          />
+        </div>
 
         <p className="text-accent-600 mt-0 text-sm font-medium">
           Remember password for signin
