@@ -11,7 +11,7 @@ const HomePage = () => {
   return (
     <>
       <div className="bg-gradient-to-r from-[#e7f7b0] to-[#b8e3c5] min-h-screen">
-        <NavBar />
+        {/* <NavBar /> */}
         <Hero />
         <TournamentsListing />
         <FeedBack />

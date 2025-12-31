@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  Outlet,
 } from "react-router-dom";
 import HomePage from "./pages/teams/HomePage";
 import Tournaments from "./pages/teams/Tournaments";
@@ -20,11 +21,20 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import OrganizersListPage from "./pages/admin/OrganizersListPage";
 import OrganizerDetailsPage from "./pages/admin/OrganizerDetailsPage";
 import TournamentsManagementPage from "./pages/admin/TournamentsManagementPage";
+import NavBar from "./components/NavBar";
+
+// Root layout with NavBar
+const RootLayout = () => (
+  <>
+    <NavBar />
+    <Outlet />
+  </>
+);
 
 const AppRoutes = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route>
+      <Route element={<RootLayout />}>
         {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/alltournaments" element={<Tournaments />} />

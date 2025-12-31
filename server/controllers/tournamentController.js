@@ -82,7 +82,15 @@ exports.postTournament = async (req, res) => {
 // Get all tournaments (public)
 exports.getAllTournaments = async (req, res) => {
   try {
-    const { sport, district, status } = req.query;
+    const { sport, district, status, startDate, endDate } = req.query;
+
+    console.log("🔍 Tournament filter query received:", {
+      sport,
+      district,
+      status,
+      startDate,
+      endDate,
+    });
 
     // Build filter object
     const filter = {};
@@ -90,9 +98,30 @@ exports.getAllTournaments = async (req, res) => {
     if (district) filter.district = district;
     if (status) filter.status = status;
 
+    // Handle date range filtering
+    if (startDate || endDate) {
+      filter.startDate = {};
+      if (startDate) {
+        // Parse the date and set it to the beginning of the day
+        filter.startDate.$gte = new Date(startDate);
+        console.log("📅 Start date filter:", new Date(startDate));
+      }
+      if (endDate) {
+        // Parse the date and set it to the end of the day
+        const endOfDay = new Date(endDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        filter.startDate.$lte = endOfDay;
+        console.log("📅 End date filter:", endOfDay);
+      }
+    }
+
+    console.log("🔎 Final MongoDB filter:", filter);
+
     const tournaments = await Tournament.find(filter)
       .populate("creator", "name email")
       .sort({ createdAt: -1 });
+
+    console.log("✅ Tournaments found:", tournaments.length);
 
     res.status(200).json({
       success: true,
@@ -100,7 +129,7 @@ exports.getAllTournaments = async (req, res) => {
       data: tournaments,
     });
   } catch (error) {
-    console.error("Error fetching tournaments:", error);
+    console.error("❌ Error fetching tournaments:", error);
     res.status(500).json({
       success: false,
       message: error.message || "Internal server error",

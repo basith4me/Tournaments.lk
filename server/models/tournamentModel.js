@@ -10,7 +10,7 @@ const tournamentSchema = new mongoose.Schema(
     sport: {
       type: String,
       required: [true, "Sport type is required"],
-      enum: ["cricket", "football", "basketball", "volleyball", "tennis", "badminton", "other"],
+      enum: ["Cricket Softball", "Cricket Hardball", "Volleyball", "Football", "Elle"],
     },
     startDate: {
       type: Date,

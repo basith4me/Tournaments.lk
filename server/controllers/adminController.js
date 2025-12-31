@@ -145,7 +145,7 @@ exports.getAllTournaments = async (req, res) => {
     }
 
     if (sport) {
-      filter.sport = sport.toLowerCase();
+      filter.sport = sport;
     }
 
     if (startDate || endDate) {

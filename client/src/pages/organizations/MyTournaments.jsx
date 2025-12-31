@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { FaEdit, FaTrash, FaPlus, FaCalendarAlt, FaMapMarkerAlt, FaTimes } from "react-icons/fa";
 import api from "../../services/api";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { sports, districts } from "../teams/data.js";
 
 const MyTournaments = () => {
   const [tournaments, setTournaments] = useState([]);
@@ -303,13 +304,12 @@ const MyTournaments = () => {
                     }
                     className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                   >
-                    <option value="cricket">Cricket</option>
-                    <option value="football">Football</option>
-                    <option value="basketball">Basketball</option>
-                    <option value="volleyball">Volleyball</option>
-                    <option value="tennis">Tennis</option>
-                    <option value="badminton">Badminton</option>
-                    <option value="other">Other</option>
+                    <option value="">Choose the sport</option>
+                    {sports.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -371,15 +371,21 @@ const MyTournaments = () => {
                   <label className="block text-secondary-700 font-medium mb-2">
                     District <span className="text-error">*</span>
                   </label>
-                  <input
+                  <select
                     required
-                    type="text"
                     value={editingTournament.district}
                     onChange={(e) =>
                       setEditingTournament({ ...editingTournament, district: e.target.value })
                     }
                     className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  />
+                  >
+                    <option value="">Choose a district</option>
+                    {districts.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Rules */}

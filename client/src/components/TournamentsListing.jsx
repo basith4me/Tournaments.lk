@@ -12,6 +12,8 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
   // Memoize filter values to prevent unnecessary re-renders
   const sport = useMemo(() => filters.sport || "", [filters.sport]);
   const district = useMemo(() => filters.district || "", [filters.district]);
+  const startDate = useMemo(() => filters.startDate || "", [filters.startDate]);
+  const endDate = useMemo(() => filters.endDate || "", [filters.endDate]);
 
   useEffect(() => {
     const fetchTournaments = async () => {
@@ -22,17 +24,29 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
         const params = new URLSearchParams();
         if (sport) params.append("sport", sport);
         if (district) params.append("district", district);
+        if (startDate) params.append("startDate", startDate);
+        if (endDate) params.append("endDate", endDate);
 
         const queryString = params.toString();
         const url = `/tournaments${queryString ? `?${queryString}` : ""}`;
+
+        // Debug logging
+        console.log("🔍 Fetching tournaments with filters:", {
+          sport,
+          district,
+          startDate,
+          endDate,
+          url,
+        });
 
         const response = await api.get(url);
 
         if (response.data.success) {
           setTournaments(response.data.data);
+          console.log("✅ Tournaments fetched:", response.data.data.length);
         }
       } catch (error) {
-        console.error("Error fetching tournaments:", error);
+        console.error("❌ Error fetching tournaments:", error);
         toast.error("Failed to load tournaments");
       } finally {
         setLoading(false);
@@ -40,7 +54,7 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
     };
 
     fetchTournaments();
-  }, [sport, district]); // Use individual filter values instead of the object
+  }, [sport, district, startDate, endDate]); // Use individual filter values instead of the object
 
   if (loading) {
     return (

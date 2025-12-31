@@ -9,6 +9,7 @@ import {
   FaFilter,
 } from "react-icons/fa";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { sports, districts } from "../../pages/teams/data.js";
 
 const TournamentsManagementPage = () => {
   const [tournaments, setTournaments] = useState([]);
@@ -238,13 +239,11 @@ const TournamentsManagementPage = () => {
               className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors capitalize"
             >
               <option value="">All Sports</option>
-              <option value="cricket">Cricket</option>
-              <option value="football">Football</option>
-              <option value="basketball">Basketball</option>
-              <option value="volleyball">Volleyball</option>
-              <option value="tennis">Tennis</option>
-              <option value="badminton">Badminton</option>
-              <option value="other">Other</option>
+              {sports.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -452,13 +451,12 @@ const TournamentsManagementPage = () => {
                   className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500"
                   required
                 >
-                  <option value="cricket">Cricket</option>
-                  <option value="football">Football</option>
-                  <option value="basketball">Basketball</option>
-                  <option value="volleyball">Volleyball</option>
-                  <option value="tennis">Tennis</option>
-                  <option value="badminton">Badminton</option>
-                  <option value="other">Other</option>
+                  <option value="">Choose the sport</option>
+                  {sports.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -522,8 +520,7 @@ const TournamentsManagementPage = () => {
                 <label className="block text-secondary-700 font-medium mb-2">
                   District
                 </label>
-                <input
-                  type="text"
+                <select
                   value={editingTournament.district}
                   onChange={(e) =>
                     setEditingTournament({
@@ -533,7 +530,14 @@ const TournamentsManagementPage = () => {
                   }
                   className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500"
                   required
-                />
+                >
+                  <option value="">Choose a district</option>
+                  {districts.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
