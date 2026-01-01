@@ -61,12 +61,6 @@ const NavBar = () => {
             >
               Tournaments
             </Link>
-            <Link
-              to="/aboutus"
-              className="text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium"
-            >
-              About Us
-            </Link>
 
             {isAuthenticated && (
               <Link
@@ -101,10 +95,10 @@ const NavBar = () => {
               </Link>
             )}
 
-            {isAuthenticated && (
+            {!isAuthenticated && (
               <Link
                 to="/post-tournaments"
-                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
               >
                 Post Tournament
               </Link>
@@ -129,13 +123,6 @@ const NavBar = () => {
             >
               Tournaments
             </Link>
-            <Link
-              to="/aboutus"
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-secondary-700 hover:text-primary-600 transition-colors duration-200 font-medium py-2"
-            >
-              About Us
-            </Link>
 
             {isAuthenticated && (
               <Link
@@ -158,7 +145,7 @@ const NavBar = () => {
                 <Link
                   to="/post-tournaments"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center"
+                  className="block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center"
                 >
                   Post Tournament
                 </Link>

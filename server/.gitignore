@@ -3,3 +3,5 @@ dist/
 npm-debug.log
 
 .env
+scripts/createAdmin.js
+scripts/changeAdminPassword.js
