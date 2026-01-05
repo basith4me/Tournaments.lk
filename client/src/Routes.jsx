@@ -34,44 +34,49 @@ const RootLayout = () => (
 const AppRoutes = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<RootLayout />}>
-        {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/alltournaments" element={<Tournaments />} />
-        <Route path="/tournaments/:id" element={<SingleTournament />} />
-        <Route path="/signin" element={<AuthPage />} />
-        <Route path="/aboutus" element={<AboutUs />} />
-
-        {/* Protected Routes */}
-        <Route
-          path="/post-tournaments"
-          element={
-            <ProtectedRoute>
-              <PostTournaments />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/my-tournaments"
-          element={
-            <ProtectedRoute>
-              <MyTournaments />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Admin Routes */}
+      <>
+        {/* Admin Login - Outside layout */}
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="organizers" element={<OrganizersListPage />} />
-          <Route path="organizers/:id" element={<OrganizerDetailsPage />} />
-          <Route path="tournaments" element={<TournamentsManagementPage />} />
-        </Route>
 
-        {/* 404 - Must be last */}
-        <Route path="*" element={<NotFound />} />
-      </Route>
+        {/* All other routes with RootLayout */}
+        <Route element={<RootLayout />}>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/alltournaments" element={<Tournaments />} />
+          <Route path="/tournaments/:id" element={<SingleTournament />} />
+          <Route path="/signin" element={<AuthPage />} />
+          <Route path="/aboutus" element={<AboutUs />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/post-tournaments"
+            element={
+              <ProtectedRoute>
+                <PostTournaments />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-tournaments"
+            element={
+              <ProtectedRoute>
+                <MyTournaments />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin Dashboard Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="organizers" element={<OrganizersListPage />} />
+            <Route path="organizers/:id" element={<OrganizerDetailsPage />} />
+            <Route path="tournaments" element={<TournamentsManagementPage />} />
+          </Route>
+
+          {/* 404 - Must be last */}
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </>
     )
   );
   return <RouterProvider router={router} />;
