@@ -34,11 +34,11 @@ const RootLayout = () => (
 const AppRoutes = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <>
-        {/* Admin Login - Outside layout */}
+      <Route>
+        {/* Routes without NavBar */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* All other routes with RootLayout */}
+        {/* Routes with NavBar */}
         <Route element={<RootLayout />}>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
@@ -76,7 +76,7 @@ const AppRoutes = () => {
           {/* 404 - Must be last */}
           <Route path="*" element={<NotFound />} />
         </Route>
-      </>
+      </Route>
     )
   );
   return <RouterProvider router={router} />;
