@@ -27,9 +27,10 @@ const OrganizerDetailsPage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
       const response = await axios.get(
-        `http://localhost:5000/api/admin/organizers/${id}`,
+        `${apiUrl}/admin/organizers/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

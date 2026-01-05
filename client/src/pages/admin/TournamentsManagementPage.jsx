@@ -37,6 +37,7 @@ const TournamentsManagementPage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
       // Build query string
       const params = new URLSearchParams();
@@ -46,7 +47,7 @@ const TournamentsManagementPage = () => {
       if (filters.endDate) params.append("endDate", filters.endDate);
 
       const queryString = params.toString();
-      const url = `http://localhost:5000/api/admin/tournaments${
+      const url = `${apiUrl}/admin/tournaments${
         queryString ? `?${queryString}` : ""
       }`;
 
@@ -70,8 +71,9 @@ const TournamentsManagementPage = () => {
   const fetchOrganizers = async () => {
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const response = await axios.get(
-        "http://localhost:5000/api/admin/organizers",
+        `${apiUrl}/admin/organizers`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,8 +118,9 @@ const TournamentsManagementPage = () => {
 
     try {
       const token = localStorage.getItem("token");
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const response = await axios.put(
-        `http://localhost:5000/api/admin/tournaments/${editingTournament._id}`,
+        `${apiUrl}/admin/tournaments/${editingTournament._id}`,
         editingTournament,
         {
           headers: {
@@ -148,8 +151,9 @@ const TournamentsManagementPage = () => {
     ) {
       try {
         const token = localStorage.getItem("token");
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
         const response = await axios.delete(
-          `http://localhost:5000/api/admin/tournaments/${id}`,
+          `${apiUrl}/admin/tournaments/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
