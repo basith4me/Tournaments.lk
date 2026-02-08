@@ -166,9 +166,9 @@ const SignUp = () => {
           />
         </div>
 
-        <p className="text-accent-600 mt-0 text-sm font-medium">
+        {/* <p className="text-accent-600 mt-0 text-sm font-medium">
           Remember password for signin
-        </p>
+        </p> */}
         <button
           type="submit"
           disabled={loading}
