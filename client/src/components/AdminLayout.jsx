@@ -107,7 +107,7 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top Bar */}
-        <header className="bg-white shadow-sm p-4 lg:hidden">
+        <header className="bg-white shadow-sm p-4 lg:hidden z-50">
           <button
             onClick={() => setSidebarOpen(true)}
             className="text-secondary-700 hover:text-secondary-900"
