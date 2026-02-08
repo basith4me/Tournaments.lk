@@ -33,7 +33,7 @@ const Tournaments = () => {
         <div className="flex flex-col justify-center items-center bg-gradient-to-r from-primary-50 to-primary-100 py-12 px-4">
           <div className="mb-8">
             <h1 className="font-heading font-bold text-3xl md:text-4xl text-secondary-800 text-center">
-              Filter Tournaments as your wish
+              Filter Tournaments
             </h1>
           </div>
           
