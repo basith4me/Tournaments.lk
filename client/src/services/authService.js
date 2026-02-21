@@ -1,5 +1,31 @@
 import api from "./api";
 
+// Decode JWT token without verifying signature (client-side only)
+const decodeToken = (token) => {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    
+    const payload = JSON.parse(atob(parts[1]));
+    return payload;
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return null;
+  }
+};
+
+// Check if token is expired
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  
+  const payload = decodeToken(token);
+  if (!payload || !payload.exp) return true;
+  
+  // exp is in seconds, Date.now() is in milliseconds
+  const currentTime = Math.floor(Date.now() / 1000);
+  return payload.exp < currentTime;
+};
+
 export const authService = {
   // Register new user
   register: async (userData) => {
@@ -27,8 +53,18 @@ export const authService = {
     localStorage.removeItem("user");
   },
 
-  // Get current user
+  // Get current user with token validation
   getCurrentUser: () => {
+    const token = localStorage.getItem("token");
+    
+    // Check if token is expired
+    if (isTokenExpired(token)) {
+      // Token expired, clear storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      return null;
+    }
+    
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   },

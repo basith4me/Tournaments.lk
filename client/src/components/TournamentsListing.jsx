@@ -5,6 +5,21 @@ import api from "../services/api";
 import { toast } from "react-toastify";
 import LoadingSpinner from "./LoadingSpinner";
 
+// Helper function to format date
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return new Date(dateString).toLocaleDateString("en-US", options);
+};
+
+// Helper function to check if tournament is expired
+const isTournamentExpired = (startDate) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tournamentDate = new Date(startDate);
+  tournamentDate.setHours(0, 0, 0, 0);
+  return tournamentDate < today;
+};
+
 const TournamentsListing = ({ ishome = true, filters = {} }) => {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,8 +57,13 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
         const response = await api.get(url);
 
         if (response.data.success) {
-          setTournaments(response.data.data);
-          console.log("✅ Tournaments fetched:", response.data.data.length);
+          // Additional client-side filtering to remove any expired tournaments
+          const upcomingTournaments = response.data.data.filter(
+            (tournament) => !isTournamentExpired(tournament.startDate)
+          );
+          
+          setTournaments(upcomingTournaments);
+          console.log("✅ Upcoming tournaments fetched:", upcomingTournaments.length);
         }
       } catch (error) {
         console.error("❌ Error fetching tournaments:", error);
@@ -85,7 +105,12 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {displayTournaments.map((tournament) => (
-              <TournamentCard key={tournament._id} tournament={tournament} />
+              <div key={tournament._id} className="relative">
+                <TournamentCard tournament={tournament} />
+                <div className="absolute top-2 right-2 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  {formatDate(tournament.startDate)}
+                </div>
+              </div>
             ))}
           </div>
         )}

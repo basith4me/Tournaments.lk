@@ -98,13 +98,18 @@ exports.getAllTournaments = async (req, res) => {
     if (district) filter.district = district;
     if (status) filter.status = status;
 
-    // Handle date range filtering
+    // Filter out expired tournaments (startDate must be >= today)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to beginning of today
+    filter.startDate = { $gte: today };
+
+    // Handle additional date range filtering
     if (startDate || endDate) {
-      filter.startDate = {};
       if (startDate) {
         // Parse the date and set it to the beginning of the day
-        filter.startDate.$gte = new Date(startDate);
-        console.log("📅 Start date filter:", new Date(startDate));
+        const selectedStartDate = new Date(startDate);
+        filter.startDate.$gte = selectedStartDate;
+        console.log("📅 Start date filter:", selectedStartDate);
       }
       if (endDate) {
         // Parse the date and set it to the end of the day
@@ -119,7 +124,7 @@ exports.getAllTournaments = async (req, res) => {
 
     const tournaments = await Tournament.find(filter)
       .populate("creator", "name email")
-      .sort({ createdAt: -1 });
+      .sort({ startDate: 1 }); // Sort by startDate ascending (upcoming soonest first)
 
     console.log("✅ Tournaments found:", tournaments.length);
 

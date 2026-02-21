@@ -301,7 +301,7 @@ const PostTournaments = () => {
             disabled={loading}
             className="w-full bg-primary-600 text-white p-3 rounded-lg font-semibold hover:bg-primary-700 transition-all duration-200 hover:shadow-lg disabled:bg-secondary-400 disabled:cursor-not-allowed disabled:hover:shadow-none mt-6"
           >
-            {loading ? "Creating Tournament..." : "Submit Tournament"}
+            {loading ? "Creating Tournament..." : "Post Tournament"}
           </button>
         </form>
       </div>
