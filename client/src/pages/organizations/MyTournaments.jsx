@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DayPicker } from "react-day-picker";
 import { FaEdit, FaTrash, FaPlus, FaCalendarAlt, FaMapMarkerAlt, FaTimes } from "react-icons/fa";
+import "react-day-picker/dist/style.css";
+import "../../styles/datepicker.css";
 import api from "../../services/api";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { sports, districts } from "../teams/data.js";
@@ -11,8 +14,25 @@ const MyTournaments = () => {
   const [loading, setLoading] = useState(true);
   const [editingTournament, setEditingTournament] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [openModal, setOpenModal] = useState(null); // Track which dropdown is open
+  const dropdownRef = useRef(null);
   const [banner, setBanner] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenModal(null);
+      }
+    };
+
+    if (openModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [openModal]);
 
   useEffect(() => {
     fetchMyTournaments();
@@ -274,7 +294,7 @@ const MyTournaments = () => {
                 </button>
               </div>
 
-              <form onSubmit={handleUpdate} className="space-y-5">
+              <form ref={dropdownRef} onSubmit={handleUpdate} className="space-y-5">
                 {/* Tournament Name */}
                 <div>
                   <label className="block text-secondary-700 font-medium mb-2">
@@ -291,26 +311,47 @@ const MyTournaments = () => {
                   />
                 </div>
 
-                {/* Sport */}
+                {/* Sport Dropdown */}
                 <div>
                   <label className="block text-secondary-700 font-medium mb-2">
                     Sport <span className="text-error">*</span>
                   </label>
-                  <select
-                    required
-                    value={editingTournament.sport}
-                    onChange={(e) =>
-                      setEditingTournament({ ...editingTournament, sport: e.target.value })
-                    }
-                    className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  >
-                    <option value="">Choose the sport</option>
-                    {sports.map((item, index) => (
-                      <option key={index} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenModal(openModal === "sport" ? null : "sport");
+                      }}
+                      className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-left bg-white hover:bg-primary-50"
+                    >
+                      {editingTournament.sport || "Choose the sport"}
+                    </button>
+                    {openModal === "sport" && (
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white border border-secondary-300 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
+                        <div className="p-3">
+                          <div className="space-y-1">
+                            {sports.map((item, index) => (
+                              <div
+                                key={index}
+                                onClick={() => {
+                                  setEditingTournament({ ...editingTournament, sport: item });
+                                  setOpenModal(null);
+                                }}
+                                className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
+                                  editingTournament.sport === item
+                                    ? "bg-primary-600 text-white font-semibold"
+                                    : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
+                                }`}
+                              >
+                                {item}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Date */}
@@ -318,36 +359,81 @@ const MyTournaments = () => {
                   <label className="block text-secondary-700 font-medium mb-2">
                     Tournament Date <span className="text-error">*</span>
                   </label>
-                  <input
-                    required
-                    type="date"
-                    value={editingTournament.startDate}
-                    onChange={(e) =>
-                      setEditingTournament({ ...editingTournament, startDate: e.target.value })
-                    }
-                    className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  />
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowDatePicker(!showDatePicker);
+                      }}
+                      className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-left bg-white hover:bg-primary-50"
+                    >
+                      {editingTournament.startDate ? new Date(editingTournament.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Select a date"}
+                    </button>
+                    {showDatePicker && (
+                      <div className="absolute top-full left-0 mt-1 bg-white border border-secondary-300 rounded-lg shadow-2xl z-50 p-3">
+                        <DayPicker
+                          mode="single"
+                          selected={editingTournament.startDate ? new Date(editingTournament.startDate) : undefined}
+                          onSelect={(date) => {
+                            if (date) {
+                              const dateStr = date.toISOString().split("T")[0];
+                              setEditingTournament({ ...editingTournament, startDate: dateStr });
+                            }
+                            setShowDatePicker(false);
+                          }}
+                          disabled={(date) => date < new Date()}
+                          className="rdp-custom"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* Tournament Type */}
+                {/* Tournament Type Dropdown */}
                 <div>
                   <label className="block text-secondary-700 font-medium mb-2">
                     Tournament Type <span className="text-error">*</span>
                   </label>
-                  <select
-                    required
-                    value={editingTournament.tournamentType}
-                    onChange={(e) =>
-                      setEditingTournament({
-                        ...editingTournament,
-                        tournamentType: e.target.value,
-                      })
-                    }
-                    className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  >
-                    <option value="day">Day</option>
-                    <option value="day-night">Day & Night</option>
-                  </select>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenModal(openModal === "tournamentType" ? null : "tournamentType");
+                      }}
+                      className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-left bg-white hover:bg-primary-50"
+                    >
+                      {editingTournament.tournamentType === "day" ? "Day" : editingTournament.tournamentType === "day-night" ? "Day & Night" : "Choose type"}
+                    </button>
+                    {openModal === "tournamentType" && (
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white border border-secondary-300 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
+                        <div className="p-3">
+                          <div className="space-y-1">
+                            {[{ value: "day", label: "Day" }, { value: "day-night", label: "Day & Night" }].map((item) => (
+                              <div
+                                key={item.value}
+                                onClick={() => {
+                                  setEditingTournament({
+                                    ...editingTournament,
+                                    tournamentType: item.value,
+                                  });
+                                  setOpenModal(null);
+                                }}
+                                className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
+                                  editingTournament.tournamentType === item.value
+                                    ? "bg-primary-600 text-white font-semibold"
+                                    : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
+                                }`}
+                              >
+                                {item.label}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Location */}
@@ -366,26 +452,47 @@ const MyTournaments = () => {
                   />
                 </div>
 
-                {/* District */}
+                {/* District Dropdown */}
                 <div>
                   <label className="block text-secondary-700 font-medium mb-2">
                     District <span className="text-error">*</span>
                   </label>
-                  <select
-                    required
-                    value={editingTournament.district}
-                    onChange={(e) =>
-                      setEditingTournament({ ...editingTournament, district: e.target.value })
-                    }
-                    className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  >
-                    <option value="">Choose a district</option>
-                    {districts.map((item, index) => (
-                      <option key={index} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenModal(openModal === "district" ? null : "district");
+                      }}
+                      className="w-full border border-secondary-300 p-3 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors text-left bg-white hover:bg-primary-50"
+                    >
+                      {editingTournament.district || "Choose a district"}
+                    </button>
+                    {openModal === "district" && (
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white border border-secondary-300 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
+                        <div className="p-3">
+                          <div className="space-y-1">
+                            {districts.map((item, index) => (
+                              <div
+                                key={index}
+                                onClick={() => {
+                                  setEditingTournament({ ...editingTournament, district: item });
+                                  setOpenModal(null);
+                                }}
+                                className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
+                                  editingTournament.district === item
+                                    ? "bg-primary-600 text-white font-semibold"
+                                    : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
+                                }`}
+                              >
+                                {item}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Rules */}

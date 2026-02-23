@@ -20,6 +20,39 @@ const isTournamentExpired = (startDate) => {
   return tournamentDate < today;
 };
 
+// Helper function to check if prize falls within price range
+const matchesPriceRange = (prize, priceRange) => {
+  if (!priceRange || !prize) return true;
+  
+  const prizeAmount = parseInt(prize);
+  
+  switch (priceRange) {
+    case "below-50k":
+      return prizeAmount < 50000;
+    case "50k-100k":
+      return prizeAmount >= 50000 && prizeAmount <= 100000;
+    case "100k-500k":
+      return prizeAmount > 100000 && prizeAmount <= 500000;
+    case "above-500k":
+      return prizeAmount > 500000;
+    default:
+      return true;
+  }
+};
+
+// Helper function to check if tournament date matches selected date
+const matchesSelectedDate = (tournamentDate, selectedDate) => {
+  if (!selectedDate) return true;
+
+  const tournamentTime = new Date(tournamentDate);
+  tournamentTime.setHours(0, 0, 0, 0);
+
+  const selectedTime = new Date(selectedDate);
+  selectedTime.setHours(0, 0, 0, 0);
+
+  return tournamentTime.getTime() === selectedTime.getTime();
+};
+
 const TournamentsListing = ({ ishome = true, filters = {} }) => {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,8 +60,8 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
   // Memoize filter values to prevent unnecessary re-renders
   const sport = useMemo(() => filters.sport || "", [filters.sport]);
   const district = useMemo(() => filters.district || "", [filters.district]);
-  const startDate = useMemo(() => filters.startDate || "", [filters.startDate]);
-  const endDate = useMemo(() => filters.endDate || "", [filters.endDate]);
+  const selectedDate = useMemo(() => filters.selectedDate || null, [filters.selectedDate]);
+  const priceRange = useMemo(() => filters.priceRange || "", [filters.priceRange]);
 
   useEffect(() => {
     const fetchTournaments = async () => {
@@ -39,8 +72,12 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
         const params = new URLSearchParams();
         if (sport) params.append("sport", sport);
         if (district) params.append("district", district);
-        if (startDate) params.append("startDate", startDate);
-        if (endDate) params.append("endDate", endDate);
+        
+        // Handle selected date
+        if (selectedDate) {
+          const dateStr = selectedDate.toISOString().split("T")[0];
+          params.append("startDate", dateStr);
+        }
 
         const queryString = params.toString();
         const url = `/tournaments${queryString ? `?${queryString}` : ""}`;
@@ -49,17 +86,20 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
         console.log("🔍 Fetching tournaments with filters:", {
           sport,
           district,
-          startDate,
-          endDate,
+          selectedDate,
+          priceRange,
           url,
         });
 
         const response = await api.get(url);
 
         if (response.data.success) {
-          // Additional client-side filtering to remove any expired tournaments
+          // Additional client-side filtering
           const upcomingTournaments = response.data.data.filter(
-            (tournament) => !isTournamentExpired(tournament.startDate)
+            (tournament) =>
+              !isTournamentExpired(tournament.startDate) &&
+              matchesPriceRange(tournament.prize, priceRange) &&
+              matchesSelectedDate(tournament.startDate, selectedDate)
           );
           
           setTournaments(upcomingTournaments);
@@ -74,7 +114,7 @@ const TournamentsListing = ({ ishome = true, filters = {} }) => {
     };
 
     fetchTournaments();
-  }, [sport, district, startDate, endDate]); // Use individual filter values instead of the object
+  }, [sport, district, selectedDate, priceRange]); // Use individual filter values instead of the object
 
   if (loading) {
     return (
