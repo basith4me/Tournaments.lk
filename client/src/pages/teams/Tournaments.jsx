@@ -3,6 +3,8 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import "../../styles/datepicker.css";
 import TournamentsListing from "../../components/TournamentsListing";
+import Footer from "../../components/Footer";
+import { getSportIcon } from "../../utils/sportIcons";
 import { districts, sports } from "./data.js";
 
 const Tournaments = () => {
@@ -27,14 +29,18 @@ const Tournaments = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       // Check if the click is outside the filter container
-      if (filterContainerRef.current && !filterContainerRef.current.contains(e.target)) {
+      if (
+        filterContainerRef.current &&
+        !filterContainerRef.current.contains(e.target)
+      ) {
         setOpenModal(null);
       }
     };
 
     if (openModal) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [openModal]);
 
@@ -84,11 +90,16 @@ const Tournaments = () => {
             </h1>
 
             {/* Responsive Filter Grid */}
-            <div ref={filterContainerRef} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
+            <div
+              ref={filterContainerRef}
+              className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3"
+            >
               {/* District Filter */}
               <div className="flex flex-col relative">
                 <button
-                  onClick={() => setOpenModal(openModal === "district" ? null : "district")}
+                  onClick={() =>
+                    setOpenModal(openModal === "district" ? null : "district")
+                  }
                   className="border-2 border-primary-600 rounded-lg px-2 md:px-3 py-2 md:py-3 text-left bg-primary-50 hover:bg-primary-100 transition-colors font-medium text-xs md:text-sm text-secondary-700 truncate"
                 >
                   {getDistrictLabel()}
@@ -131,7 +142,9 @@ const Tournaments = () => {
               {/* Sport Filter */}
               <div className="flex flex-col relative">
                 <button
-                  onClick={() => setOpenModal(openModal === "sport" ? null : "sport")}
+                  onClick={() =>
+                    setOpenModal(openModal === "sport" ? null : "sport")
+                  }
                   className="border-2 border-primary-600 rounded-lg px-2 md:px-3 py-2 md:py-3 text-left bg-primary-50 hover:bg-primary-100 transition-colors font-medium text-xs md:text-sm text-secondary-700 truncate"
                 >
                   {getSportLabel()}
@@ -152,19 +165,23 @@ const Tournaments = () => {
                         >
                           All Sports
                         </div>
-                        {sports.map((item, index) => (
-                          <div
-                            key={index}
-                            onClick={() => handleFilterSelect("sport", item)}
-                            className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
-                              filters.sport === item
-                                ? "bg-primary-600 text-white font-semibold"
-                                : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
-                            }`}
-                          >
-                            {item}
-                          </div>
-                        ))}
+                        {sports.map((item, index) => {
+                          const IconComponent = getSportIcon(item);
+                          return (
+                            <div
+                              key={index}
+                              onClick={() => handleFilterSelect("sport", item)}
+                              className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm flex items-center gap-2 ${
+                                filters.sport === item
+                                  ? "bg-primary-600 text-white font-semibold"
+                                  : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
+                              }`}
+                            >
+                              <IconComponent className="text-lg" />
+                              <span className="capitalize">{item}</span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -174,7 +191,11 @@ const Tournaments = () => {
               {/* Date Filter */}
               <div className="flex flex-col relative">
                 <button
-                  onClick={() => setOpenModal(openModal === "selectedDate" ? null : "selectedDate")}
+                  onClick={() =>
+                    setOpenModal(
+                      openModal === "selectedDate" ? null : "selectedDate",
+                    )
+                  }
                   className="border-2 border-primary-600 rounded-lg px-2 md:px-3 py-2 md:py-3 text-left bg-primary-50 hover:bg-primary-100 transition-colors font-medium text-xs md:text-sm text-secondary-700 truncate"
                 >
                   {getDateLabel()}
@@ -200,10 +221,12 @@ const Tournaments = () => {
 
                       <div className="mt-3 flex gap-2">
                         <button
-                          onClick={() => setFilters((prev) => ({
-                            ...prev,
-                            selectedDate: null,
-                          }))}
+                          onClick={() =>
+                            setFilters((prev) => ({
+                              ...prev,
+                              selectedDate: null,
+                            }))
+                          }
                           className="flex-1 px-3 py-2 border-2 border-secondary-300 rounded text-secondary-700 font-medium hover:bg-secondary-50 transition-colors text-xs md:text-sm"
                         >
                           Clear
@@ -217,7 +240,11 @@ const Tournaments = () => {
               {/* Price Range Filter */}
               <div className="flex flex-col relative">
                 <button
-                  onClick={() => setOpenModal(openModal === "priceRange" ? null : "priceRange")}
+                  onClick={() =>
+                    setOpenModal(
+                      openModal === "priceRange" ? null : "priceRange",
+                    )
+                  }
                   className="border-2 border-primary-600 rounded-lg px-2 md:px-3 py-2 md:py-3 text-left bg-primary-50 hover:bg-primary-100 transition-colors font-medium text-xs md:text-sm text-secondary-700 truncate"
                 >
                   {getPriceRangeLabel()}
@@ -241,7 +268,9 @@ const Tournaments = () => {
                         {priceRanges.map((range) => (
                           <div
                             key={range.id}
-                            onClick={() => handleFilterSelect("priceRange", range.value)}
+                            onClick={() =>
+                              handleFilterSelect("priceRange", range.value)
+                            }
                             className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
                               filters.priceRange === range.value
                                 ? "bg-green-600 text-white font-semibold"
@@ -272,6 +301,7 @@ const Tournaments = () => {
         <div>
           <TournamentsListing ishome={false} filters={filters} />
         </div>
+        <Footer />
       </div>
     </>
   );
