@@ -1,14 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+import "../../styles/datepicker.css";
 import api from "../../services/api";
+import { getSportIcon } from "../../utils/sportIcons";
 import {districts, sports} from "../teams/data.js";
+
+// Helper function to format number with commas
+const formatNumberWithCommas = (num) => {
+  if (!num) return "";
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// Helper function to remove commas from formatted number
+const removeCommas = (num) => {
+  return num.toString().replace(/,/g, "");
+};
 
 const PostTournaments = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [openModal, setOpenModal] = useState(null); // Track which dropdown is open
+  const dropdownRef = useRef(null);
   const [banner, setBanner] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
+  const [prizeDisplay, setPrizeDisplay] = useState(""); // For displaying formatted prize
 
   const [formData, setFormData] = useState({
     name: "",
@@ -21,6 +40,20 @@ const PostTournaments = () => {
     prize: "",
     contact: "",
   });
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenModal(null);
+      }
+    };
+
+    if (openModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [openModal]);
 
   const handleBannerUpload = (event) => {
     const file = event.target.files[0];
@@ -53,10 +86,26 @@ const PostTournaments = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    // Special handling for prize field
+    if (name === "prize") {
+      // Remove all non-numeric characters
+      const numericValue = removeCommas(value);
+      
+      // Update the actual form data with the raw numeric value
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+      
+      // Update the display value with formatted number
+      setPrizeDisplay(formatNumberWithCommas(numericValue));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -112,7 +161,7 @@ const PostTournaments = () => {
         </h2>
 
         {/* Form Start */}
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form ref={dropdownRef} className="space-y-4" onSubmit={handleSubmit}>
           {/* Tournament Name */}
           <div>
             <label className="block text-secondary-700 font-medium mb-2">
@@ -130,24 +179,51 @@ const PostTournaments = () => {
           </div>
 
           {/* Select a Sport */}
+          {/* Sport Dropdown */}
           <div>
             <label className="block text-secondary-700 font-medium mb-2">
               Select a Sport <span className="text-error">*</span>
             </label>
-            <select
-              required
-              name="sport"
-              value={formData.sport}
-              onChange={handleInputChange}
-              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-            >
-              <option value="">Choose the sport</option>
-              {sports.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenModal(openModal === "sport" ? null : "sport");
+                }}
+                className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-left bg-white hover:bg-green-50"
+              >
+                {formData.sport || "Choose the sport"}
+              </button>
+              {openModal === "sport" && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border-2 border-green-600 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      {sports.map((item, index) => {
+                        const IconComponent = getSportIcon(item);
+                        return (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              setFormData(prev => ({ ...prev, sport: item }));
+                              setOpenModal(null);
+                            }}
+                            className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm flex items-center gap-2 ${
+                              formData.sport === item
+                                ? "bg-green-600 text-white font-semibold"
+                                : "bg-secondary-50 text-secondary-700 hover:bg-green-100"
+                            }`}
+                          >
+                            <IconComponent className="text-lg" />
+                            <span className="capitalize">{item}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Tournament Date */}
@@ -155,33 +231,81 @@ const PostTournaments = () => {
             <label className="block text-secondary-700 font-medium mb-2">
               Pick Tournament Date <span className="text-error">*</span>
             </label>
-            <input
-              required
-              type="date"
-              name="startDate"
-              value={formData.startDate}
-              onChange={handleInputChange}
-              min={new Date().toISOString().split("T")[0]}
-              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-            />
+            <div className="relative">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowDatePicker(!showDatePicker);
+                }}
+                className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-left bg-white hover:bg-primary-50"
+              >
+                {formData.startDate ? new Date(formData.startDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Select a date"}
+              </button>
+              {showDatePicker && (
+                <div className="absolute top-full left-0 mt-1 bg-white border-2 border-green-600 rounded-lg shadow-2xl z-50 p-3">
+                  <DayPicker
+                    mode="single"
+                    selected={formData.startDate ? new Date(formData.startDate) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const dateStr = `${year}-${month}-${day}`;
+                        setFormData(prev => ({ ...prev, startDate: dateStr }));
+                      }
+                      setShowDatePicker(false);
+                    }}
+                    disabled={(date) => date < new Date()}
+                    className="rdp-custom"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Tournament Type */}
+          {/* Tournament Type Dropdown */}
           <div>
             <label className="block text-secondary-700 font-medium mb-2">
               Tournament Type <span className="text-error">*</span>
             </label>
-            <select
-              required
-              name="tournamentType"
-              value={formData.tournamentType}
-              onChange={handleInputChange}
-              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-            >
-              <option value="">Choose type</option>
-              <option value="day">Day</option>
-              <option value="day-night">Day & Night</option>
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenModal(openModal === "tournamentType" ? null : "tournamentType");
+                }}
+                className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-left bg-white hover:bg-green-50"
+              >
+                {formData.tournamentType === "day" ? "Day" : formData.tournamentType === "day-night" ? "Day & Night" : "Choose type"}
+              </button>
+              {openModal === "tournamentType" && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border-2 border-green-600 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      {[{ value: "day", label: "Day" }, { value: "day-night", label: "Day & Night" }].map((item) => (
+                        <div
+                          key={item.value}
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, tournamentType: item.value }));
+                            setOpenModal(null);
+                          }}
+                          className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
+                            formData.tournamentType === item.value
+                              ? "bg-green-600 text-white font-semibold"
+                              : "bg-secondary-50 text-secondary-700 hover:bg-green-100"
+                          }`}
+                        >
+                          {item.label}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Location / Town */}
@@ -200,25 +324,47 @@ const PostTournaments = () => {
             />
           </div>
 
-          {/* District */}
+          {/* District Dropdown */}
           <div>
             <label className="block text-secondary-700 font-medium mb-2">
               District <span className="text-error">*</span>
             </label>
-            <select
-              required
-              name="district"
-              value={formData.district}
-              onChange={handleInputChange}
-              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-            >
-              <option value="">Choose a district</option>
-              {districts.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenModal(openModal === "district" ? null : "district");
+                }}
+                className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors text-left bg-white hover:bg-green-50"
+              >
+                {formData.district || "Choose a district"}
+              </button>
+              {openModal === "district" && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border-2 border-green-600 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      {districts.map((item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, district: item }));
+                            setOpenModal(null);
+                          }}
+                          className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
+                            formData.district === item
+                              ? "bg-green-600 text-white font-semibold"
+                              : "bg-secondary-50 text-secondary-700 hover:bg-green-100"
+                          }`}
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Rules & Regulations */}
@@ -241,14 +387,19 @@ const PostTournaments = () => {
             <label className="block text-secondary-700 font-medium mb-2">
               Champion's Prize
             </label>
-            <input
-              type="number"
-              name="prize"
-              value={formData.prize}
-              onChange={handleInputChange}
-              placeholder="Enter 1st prize for the tournament"
-              className="w-full border-2 border-green-600 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-            />
+            <div className="relative">
+              <span className="absolute left-4 top-3 text-secondary-700 font-semibold text-lg pointer-events-none">
+                LKR
+              </span>
+              <input
+                type="text"
+                name="prize"
+                value={prizeDisplay}
+                onChange={handleInputChange}
+                placeholder="Enter 1st prize for the tournament"
+                className="w-full border-2 border-green-600 p-3 pl-14 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              />
+            </div>
           </div>
 
           {/* Contact Number */}
