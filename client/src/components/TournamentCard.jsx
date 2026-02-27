@@ -1,27 +1,11 @@
 import React from "react";
-import { GiCricketBat, GiVolleyballBall, GiBaseballBat } from "react-icons/gi";
-import { FaSun } from "react-icons/fa";
-import { BiFootball, BiCricketBall } from "react-icons/bi";
 import { FaMapMarker, FaCalendarAlt } from "react-icons/fa";
 import { GiMoon } from "react-icons/gi";
+import { FaSun } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { getSportIcon } from "../utils/sportIcons";
 
 const TournamentCard = ({ tournament }) => {
-  // Mapping of sports to icons
-  const sportIconMap = {
-    "cricket softball": GiCricketBat,
-    "cricket hardball": BiCricketBall,
-    volleyball: GiVolleyballBall,
-    football: BiFootball,
-    elle: GiBaseballBat,
-  };
-
-  // Get the appropriate icon component for the sport
-  const getSportIcon = (sport) => {
-    const sportLower = sport?.toLowerCase() || "cricket softball";
-    return sportIconMap[sportLower] || GiCricketBat;
-  };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
