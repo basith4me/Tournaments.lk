@@ -128,7 +128,13 @@ const TournamentsManagementPage = () => {
   const handleEdit = (tournament) => {
     setEditingTournament({
       ...tournament,
-      startDate: new Date(tournament.startDate).toISOString().split("T")[0],
+      startDate: (() => {
+        const date = new Date(tournament.startDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      })(),
     });
     setEditModalOpen(true);
   };
@@ -364,7 +370,10 @@ const TournamentsManagementPage = () => {
                     selected={filters.startDate ? new Date(filters.startDate + "T00:00:00") : undefined}
                     onSelect={(date) => {
                       if (date) {
-                        const dateStr = date.toISOString().split("T")[0];
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const dateStr = `${year}-${month}-${day}`;
                         setFilters(prev => ({ ...prev, startDate: dateStr }));
                       }
                       setShowStartDatePicker(false);
@@ -399,7 +408,10 @@ const TournamentsManagementPage = () => {
                     selected={filters.endDate ? new Date(filters.endDate + "T00:00:00") : undefined}
                     onSelect={(date) => {
                       if (date) {
-                        const dateStr = date.toISOString().split("T")[0];
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const dateStr = `${year}-${month}-${day}`;
                         setFilters(prev => ({ ...prev, endDate: dateStr }));
                       }
                       setShowEndDatePicker(false);
@@ -639,7 +651,10 @@ const TournamentsManagementPage = () => {
                         selected={editingTournament.startDate ? new Date(editingTournament.startDate + "T00:00:00") : undefined}
                         onSelect={(date) => {
                           if (date) {
-                            const dateStr = date.toISOString().split("T")[0];
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                            const day = String(date.getDate()).padStart(2, '0');
+                            const dateStr = `${year}-${month}-${day}`;
                             setEditingTournament({ ...editingTournament, startDate: dateStr });
                           }
                           setShowEditDatePicker(false);
