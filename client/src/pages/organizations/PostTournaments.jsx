@@ -5,6 +5,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import "../../styles/datepicker.css";
 import api from "../../services/api";
+import { getSportIcon } from "../../utils/sportIcons";
 import {districts, sports} from "../teams/data.js";
 
 // Helper function to format number with commas
@@ -198,22 +199,26 @@ const PostTournaments = () => {
                 <div className="absolute top-full left-0 mt-1 w-full bg-white border-2 border-green-600 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
                   <div className="p-3">
                     <div className="space-y-1">
-                      {sports.map((item, index) => (
-                        <div
-                          key={index}
-                          onClick={() => {
-                            setFormData(prev => ({ ...prev, sport: item }));
-                            setOpenModal(null);
-                          }}
-                          className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
-                            formData.sport === item
-                              ? "bg-green-600 text-white font-semibold"
-                              : "bg-secondary-50 text-secondary-700 hover:bg-green-100"
-                          }`}
-                        >
-                          {item}
-                        </div>
-                      ))}
+                      {sports.map((item, index) => {
+                        const IconComponent = getSportIcon(item);
+                        return (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              setFormData(prev => ({ ...prev, sport: item }));
+                              setOpenModal(null);
+                            }}
+                            className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm flex items-center gap-2 ${
+                              formData.sport === item
+                                ? "bg-green-600 text-white font-semibold"
+                                : "bg-secondary-50 text-secondary-700 hover:bg-green-100"
+                            }`}
+                          >
+                            <IconComponent className="text-lg" />
+                            <span className="capitalize">{item}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -244,7 +249,10 @@ const PostTournaments = () => {
                     selected={formData.startDate ? new Date(formData.startDate) : undefined}
                     onSelect={(date) => {
                       if (date) {
-                        const dateStr = date.toISOString().split("T")[0];
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const dateStr = `${year}-${month}-${day}`;
                         setFormData(prev => ({ ...prev, startDate: dateStr }));
                       }
                       setShowDatePicker(false);

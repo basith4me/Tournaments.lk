@@ -7,6 +7,8 @@ import "react-day-picker/dist/style.css";
 import "../../styles/datepicker.css";
 import api from "../../services/api";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import Footer from "../../components/Footer";
+import { getSportIcon } from "../../utils/sportIcons";
 import { sports, districts } from "../teams/data.js";
 
 const MyTournaments = () => {
@@ -71,7 +73,13 @@ const MyTournaments = () => {
   const handleEdit = (tournament) => {
     setEditingTournament({
       ...tournament,
-      startDate: new Date(tournament.startDate).toISOString().split("T")[0],
+      startDate: (() => {
+        const date = new Date(tournament.startDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      })(),
     });
     setBannerPreview(tournament.banner);
     setBanner(null);
@@ -331,22 +339,26 @@ const MyTournaments = () => {
                       <div className="absolute top-full left-0 mt-1 w-full bg-white border border-secondary-300 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto">
                         <div className="p-3">
                           <div className="space-y-1">
-                            {sports.map((item, index) => (
-                              <div
-                                key={index}
-                                onClick={() => {
-                                  setEditingTournament({ ...editingTournament, sport: item });
-                                  setOpenModal(null);
-                                }}
-                                className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm ${
-                                  editingTournament.sport === item
-                                    ? "bg-primary-600 text-white font-semibold"
-                                    : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
-                                }`}
-                              >
-                                {item}
-                              </div>
-                            ))}
+                            {sports.map((item, index) => {
+                              const IconComponent = getSportIcon(item);
+                              return (
+                                <div
+                                  key={index}
+                                  onClick={() => {
+                                    setEditingTournament({ ...editingTournament, sport: item });
+                                    setOpenModal(null);
+                                  }}
+                                  className={`p-2 md:p-3 rounded cursor-pointer transition-all text-xs md:text-sm flex items-center gap-2 ${
+                                    editingTournament.sport === item
+                                      ? "bg-primary-600 text-white font-semibold"
+                                      : "bg-secondary-50 text-secondary-700 hover:bg-primary-100"
+                                  }`}
+                                >
+                                  <IconComponent className="text-lg" />
+                                  <span className="capitalize">{item}</span>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       </div>
@@ -377,7 +389,10 @@ const MyTournaments = () => {
                           selected={editingTournament.startDate ? new Date(editingTournament.startDate) : undefined}
                           onSelect={(date) => {
                             if (date) {
-                              const dateStr = date.toISOString().split("T")[0];
+                              const year = date.getFullYear();
+                              const month = String(date.getMonth() + 1).padStart(2, '0');
+                              const day = String(date.getDate()).padStart(2, '0');
+                              const dateStr = `${year}-${month}-${day}`;
                               setEditingTournament({ ...editingTournament, startDate: dateStr });
                             }
                             setShowDatePicker(false);
@@ -583,6 +598,7 @@ const MyTournaments = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
